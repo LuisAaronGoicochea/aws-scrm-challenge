@@ -10,8 +10,8 @@ phases:
   build:
     commands:
       - cd src
-      - python3 ../get_keys.py
-      - python3 ../main.py
+      - python3 get_keys.py
+      - python3 main.py
 
 artifacts:
   files:
