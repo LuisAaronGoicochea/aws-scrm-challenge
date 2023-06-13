@@ -19,7 +19,12 @@ class DataProcessor:
             pyspark.sql.DataFrame: DataFrame que contiene los datos leídos.
         """
         if options is None:
-            options = {}
+        options = {}
+
+        if isinstance(options, list):
+            # Si options es una lista, conviértela a un diccionario
+            options = dict(options)
+
         return self.spark.read.format(format).options(**options).load(path)
 
     def calculate_total_quantity(self, data_df, group_by_column, quantity_column):
