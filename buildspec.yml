@@ -5,6 +5,7 @@ phases:
     commands:
       - apt-get update
       - apt-get install -y python3-pip
+      - apt-get install -y hadoop
       - python3 -m pip install pyspark==3.1.2
       
   build:
