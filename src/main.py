@@ -24,6 +24,7 @@ def main():
     conf.set("spark.hadoop.fs.s3a.secret.key", secret_access_key)
     conf.set("spark.hadoop.fs.s3.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
     conf.set("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.10.2,org.apache.hadoop:hadoop-client:2.10.2")
+    conf.set("spark.jars.excludes", "com.google.guava:guava")
     
     # Creando el contexto de Spark
     sc = SparkContext(conf=conf)

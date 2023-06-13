@@ -6,7 +6,6 @@ phases:
       - apt-get update
       - apt-get install -y python3-pip
       - python3 -m pip install pyspark==3.1.2
-      - python3 -m pip install aws-hadoop
       
   build:
     commands:
