@@ -34,7 +34,7 @@ def main():
                   raw_path + "/ticket_line.csv",
                   raw_path + "/stores.csv",
                   raw_path + "/stores_v2.csv"]
-    formats = ["json", "csv", "csv", "csv]
+    formats = ["json", "csv", "csv", "csv"]
     options = [{"header": "true"}, {"header": "true"}, {"header": "true"}, {"header": "true"}]
     output_path = "s3://scrm-bucket-defined/scrm/defined/data"
     result_output_path = "s3://scrm-bucket-resultados-challenge/scrm/results/data"
