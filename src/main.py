@@ -32,7 +32,7 @@ def main():
     hadoopConf.set("spark.hadoop.fs.s3a.aws.credential.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider")
     
     data_processor = DataProcessor(spark)
-    raw_path = "s3a://scrm-challenge-raw/scrm/raw/data"
+    raw_path= "s3a://scrm-challenge-raw/scrm/raw/data"
     data_paths = [raw_path + "/products.json",
                   raw_path + "/ticket_line.csv",
                   raw_path + "/stores.csv",
