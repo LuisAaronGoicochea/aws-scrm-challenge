@@ -1,4 +1,5 @@
 import os
+import json
 from pyspark.sql.functions import *
 from pyspark.sql import SparkSession
 from pyspark import SparkContext, SparkConf
@@ -18,11 +19,9 @@ def main():
 
     # Obtiene las variables de acceso desde Secrets Manager
     secret = get_secret()
-    
-    print(secret)
-    
-    access_key = secret['access_key']
-    secret_access_key = secret['secret_key']
+    secret_data = json.loads(secret[0])
+    access_key = secret_data["access_key"]
+    secret_access_key = secret_data["secret_key"]
     
     hadoopConf = sc._jsc.hadoopConfiguration()
     hadoopConf.set("fs.s3a.access.key", access_key)
