@@ -23,6 +23,7 @@ def main():
     spark = SparkSession(sc).builder.appName("scrm-challenge-app") \
         .config("spark.hadoop.fs.s3a.access.key", access_key) \
         .config("spark.hadoop.fs.s3a.secret.key", secret_access_key) \
+        .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
         .getOrCreate()
 
     hadoopConf = sc._jsc.hadoopConfiguration()
