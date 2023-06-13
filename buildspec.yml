@@ -1,12 +1,18 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      python: 3.9
   pre_build:
     commands:
-      - pip install pyspark
+      - apt-get update
+      - apt-get install -y python3-pip
+      - python3 -m pip install pyspark==3.1.2
+      
   build:
     commands:
-      - spark-submit main.py
+      - cd src
+      - python3 ../get_keys.py
+      - python3 ../main.py
+
+artifacts:
+  files:
+    - '**/*'
