@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-import findspark
-findspark.init()
-
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.window import Window

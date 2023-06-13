@@ -1,8 +1,33 @@
+import os
 from pyspark.sql.functions import *
+from pyspark import SparkContext, SparkConf
 from data_processor import DataProcessor
+from get_keys import get_secret
+
+# Añadiendo paquetes para obtener datos de S3
+os.environ["PYSPARK_SUBMIT_ARGS"] = "--packages com.amazon:aws-java-sdk-s3:1.12.96,org.apache.hadoop:hadoop-aws:3.3.1 pyspark-shell"
 
 def main():
-    spark = SparkSession.builder.getOrCreate()
+    # Añadiendo paquetes para obtener datos de S3
+    os.environ["PYSPARK_SUBMIT_ARGS"] = "--packages com.amazon:aws-java-sdk-s3:1.12.96,org.apache.hadoop:hadoop-aws:3.3.1 pyspark-shell"
+
+    # Creando la configuración de Spark
+    conf = SparkConf().setAppName("scrm-challenge")
+    sc = SparkContext(conf=conf)
+
+    # Creando la sesión de Spark
+    spark = SparkSession(sc).builder.appName("scrm-challenge-app").getOrCreate()
+
+    # Obtiene las variables de acceso desde Secrets Manager
+    secret = get_secret()
+    access_key = secret['access_key']
+    secret_access_key = secret['secret_access_key']
+    
+    hadoopConf = sc._jsc.hadoopConfiguration()
+    hadoopConf.set("fs.s3a.access.key", access_key)
+    hadoopConf.set("fs.s3a.secret.key", secret_access_key)
+    hadoopConf.set("spark.hadoop.fs.s3a.aws.credential.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider")
+    
     data_processor = DataProcessor(spark)
     raw_path = "s3://scrm-challenge-raw/scrm/raw/data"
     data_paths = [raw_path + "/products.json",
