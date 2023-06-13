@@ -5,17 +5,7 @@ phases:
     commands:
       - apt-get update
       - apt-get install -y python3-pip
-      - wget https://downloads.apache.org/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
-      - tar xf hadoop-3.3.1.tar.gz
-      - mv hadoop-3.3.1 /opt/hadoop
-      - echo 'export HADOOP_HOME=/opt/hadoop' >> $HOME/.bashrc
-      - echo 'export PATH=$PATH:$HADOOP_HOME/bin' >> $HOME/.bashrc
-      - . $HOME/.bashrc
       - python3 -m pip install pyspark==3.1.2
-      - apt-get install -y openjdk-8-jdk
-      - wget http://archive.ubuntu.com/ubuntu/pool/universe/h/hadoop/hadoop-aws_3.2.1-1_amd64.deb
-      - dpkg -i hadoop-aws_3.2.1-1_amd64.deb
-      - apt-get -f install
       
   build:
     commands:
