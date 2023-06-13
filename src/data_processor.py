@@ -1,6 +1,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.window import Window
+from itertools import chain
 
 class DataProcessor:
     def __init__(self, spark):
@@ -22,8 +23,9 @@ class DataProcessor:
             options = {}
 
         if isinstance(options, list):
-            # Si options es una lista, conviértela a un diccionario
-            options = dict(options)
+            # Combina los diccionarios en la lista de opciones
+            merged_options = dict(chain.from_iterable(d.items() for d in options))
+            options = merged_options
 
         return self.spark.read.format(format).options(**options).load(path)
 
