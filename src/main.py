@@ -1,5 +1,6 @@
 import os
 from pyspark.sql.functions import *
+from pyspark.sql import SparkSession
 from pyspark import SparkContext, SparkConf
 from data_processor import DataProcessor
 from get_keys import get_secret
