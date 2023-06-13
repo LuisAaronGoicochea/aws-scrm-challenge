@@ -19,7 +19,7 @@ class DataProcessor:
             pyspark.sql.DataFrame: DataFrame que contiene los datos leídos.
         """
         if options is None:
-        options = {}
+            options = {}
 
         if isinstance(options, list):
             # Si options es una lista, conviértela a un diccionario
