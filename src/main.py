@@ -32,15 +32,15 @@ def main():
     hadoopConf.set("spark.hadoop.fs.s3a.aws.credential.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider")
     
     data_processor = DataProcessor(spark)
-    raw_path = "s3://scrm-challenge-raw/scrm/raw/data"
+    raw_path = "s3a://scrm-challenge-raw/scrm/raw/data"
     data_paths = [raw_path + "/products.json",
                   raw_path + "/ticket_line.csv",
                   raw_path + "/stores.csv",
                   raw_path + "/stores_v2.csv"]
     formats = ["json", "csv", "csv", "csv"]
     options = [{"header": "true"}, {"header": "true"}, {"header": "true"}, {"header": "true"}]
-    output_path = "s3://scrm-bucket-defined/scrm/defined/data"
-    result_output_path = "s3://scrm-bucket-resultados-challenge/scrm/results/data"
+    output_path = "s3a://scrm-bucket-defined/scrm/defined/data"
+    result_output_path = "s3a://scrm-bucket-resultados-challenge/scrm/results/data"
 
     joined_df, total_quantity_df, distinct_stores_df, grouped_stores_df, unioned_stores_df = \
         data_processor.process_data(data_paths, formats, options, output_path, result_output_path)
