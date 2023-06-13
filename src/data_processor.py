@@ -20,7 +20,7 @@ class DataProcessor:
         """
         if options is None:
             options = {}
-        return self.spark.read.format(format).options(options).load(path)
+        return self.spark.read.format(format).options(**options).load(path)
 
     def calculate_total_quantity(self, data_df, group_by_column, quantity_column):
         """
@@ -81,7 +81,7 @@ class DataProcessor:
         """
         window_spec = Window.partitionBy(group_by_columns).orderBy(desc(value_column))
         return data_df.groupBy(group_by_columns).agg(sum(value_column).alias(value_column)) \
-                       .withColumn(rank_column, row_number().over(window_spec))
+            .withColumn(rank_column, row_number().over(window_spec))
 
     def filter_by_rank(self, data_df, rank_column, rank):
         """
@@ -168,10 +168,10 @@ class DataProcessor:
         
         if result_output_path:
             # Guardar los resultados de los Dataframes del Challenge
-            joined_df.write.csv(result_output_path + "/joined_df", header=True, mode="overwrite")
-            total_quantity_df.write.csv(result_output_path + "/total_quantity_df", header=True, mode="overwrite")
-            distinct_stores_df.write.csv(result_output_path + "/distinct_stores_df", header=True, mode="overwrite")
-            grouped_stores_df.write.csv(result_output_path + "/grouped_stores_df", header=True, mode="overwrite")
-            unioned_stores_df.write.csv(result_output_path + "/unioned_stores_df", header=True, mode="overwrite")
+            joined_df.write.option("header", True).csv(result_output_path + "/joined_df.csv", header=True)
+            total_quantity_df.write.option("header", True).csv(result_output_path + "/total_quantity_df.csv", header=True)
+            distinct_stores_df.write.option("header", True).csv(result_output_path + "/distinct_stores_df.csv", header=True)
+            grouped_stores_df.write.option("header", True).csv(result_output_path + "/grouped_stores_df.csv", header=True)
+            unioned_stores_df.write.option("header", True).csv(result_output_path + "/unioned_stores_df.csv", header=True)
 
         return joined_df, total_quantity_df, distinct_stores_df, grouped_stores_df, unioned_stores_df
