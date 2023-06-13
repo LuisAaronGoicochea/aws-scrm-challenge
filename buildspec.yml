@@ -2,11 +2,13 @@ version: 0.2
 
 phases:
   pre_build:
+    runtime-versions:
+      python: 3.7
     commands:
       - apt-get update
       - apt-get install -y python3-pip
       - python3 -m pip install pyspark==3.1.2
-      - python3 -m pip install hadoop-aws==3.3.1
+      - python3 -m pip install hadoop-aws>=3.3.0,<3.4.0
       
   build:
     commands:
