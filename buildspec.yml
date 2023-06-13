@@ -5,7 +5,12 @@ phases:
     commands:
       - apt-get update
       - apt-get install -y python3-pip
-      - apt-get install -y hadoop
+      - wget https://downloads.apache.org/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
+      - tar xf hadoop-3.3.1.tar.gz
+      - mv hadoop-3.3.1 /opt/hadoop
+      - echo 'export HADOOP_HOME=/opt/hadoop' >> $HOME/.bashrc
+      - echo 'export PATH=$PATH:$HADOOP_HOME/bin' >> $HOME/.bashrc
+      - source $HOME/.bashrc
       - python3 -m pip install pyspark==3.1.2
       
   build:
