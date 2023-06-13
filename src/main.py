@@ -8,12 +8,6 @@ from get_keys import get_secret
 
 
 def main():
-    # Creando la configuración de Spark
-    conf = SparkConf().setAppName("scrm-challenge")
-    sc = SparkContext(conf=conf)
-
-    # Creando la sesión de Spark
-    spark = SparkSession(sc).builder.appName("scrm-challenge-app").getOrCreate()
 
     # Obtiene las variables de acceso desde Secrets Manager
     secret = get_secret()
@@ -21,6 +15,16 @@ def main():
     access_key = secret_data["access_key"]
     secret_access_key = secret_data["secret_key"]
     
+    # Creando la configuración de Spark
+    conf = SparkConf().setAppName("scrm-challenge")
+    sc = SparkContext(conf=conf)
+
+    # Creando la sesión de Spark
+    spark = SparkSession(sc).builder.appName("scrm-challenge-app") \
+        .config("spark.hadoop.fs.s3a.access.key", access_key) \
+        .config("spark.hadoop.fs.s3a.secret.key", secret_access_key) \
+        .getOrCreate()
+
     hadoopConf = sc._jsc.hadoopConfiguration()
     hadoopConf.set("fs.s3a.access.key", access_key)
     hadoopConf.set("fs.s3a.secret.key", secret_access_key)
