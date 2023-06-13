@@ -5,7 +5,7 @@ from data_processor import DataProcessor
 from get_keys import get_secret
 
 # Añadiendo paquetes para obtener datos de S3
-os.environ["PYSPARK_SUBMIT_ARGS"] = "--packages com.amazon:aws-java-sdk-s3:1.12.486,org.apache.hadoop:hadoop-aws:3.3.1 pyspark-shell"
+# os.environ["PYSPARK_SUBMIT_ARGS"] = "--packages com.amazon:aws-java-sdk-s3:1.12.486,org.apache.hadoop:hadoop-aws:3.3.1 pyspark-shell"
 
 def main():
     # Creando la configuración de Spark
