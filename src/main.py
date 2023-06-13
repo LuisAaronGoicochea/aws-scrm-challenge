@@ -18,8 +18,11 @@ def main():
 
     # Obtiene las variables de acceso desde Secrets Manager
     secret = get_secret()
+    
+    print(secret)
+    
     access_key = secret['access_key']
-    secret_access_key = secret['secret_access_key']
+    secret_access_key = secret['secret_key']
     
     hadoopConf = sc._jsc.hadoopConfiguration()
     hadoopConf.set("fs.s3a.access.key", access_key)

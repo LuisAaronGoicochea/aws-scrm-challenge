@@ -24,8 +24,6 @@ def get_secret():
     # Decrypts secret using the associated KMS key.
     secret = get_secret_value_response['SecretString']
     
-    print(secret)
-    
     # Accede a CodePipeline
     codepipeline_client = boto3.client('codepipeline')
 
