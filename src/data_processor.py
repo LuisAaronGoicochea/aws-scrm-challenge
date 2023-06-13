@@ -20,7 +20,7 @@ class DataProcessor:
         """
         if options is None:
             options = {}
-        return self.spark.read.format(format).options(**options).load(path)
+        return self.spark.read.format(format).options(options).load(path)
 
     def calculate_total_quantity(self, data_df, group_by_column, quantity_column):
         """
