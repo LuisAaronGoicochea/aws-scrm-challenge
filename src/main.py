@@ -8,9 +8,6 @@ from get_keys import get_secret
 os.environ["PYSPARK_SUBMIT_ARGS"] = "--packages com.amazon:aws-java-sdk-s3:1.12.96,org.apache.hadoop:hadoop-aws:3.3.1 pyspark-shell"
 
 def main():
-    # Añadiendo paquetes para obtener datos de S3
-    os.environ["PYSPARK_SUBMIT_ARGS"] = "--packages com.amazon:aws-java-sdk-s3:1.12.96,org.apache.hadoop:hadoop-aws:3.3.1 pyspark-shell"
-
     # Creando la configuración de Spark
     conf = SparkConf().setAppName("scrm-challenge")
     sc = SparkContext(conf=conf)
