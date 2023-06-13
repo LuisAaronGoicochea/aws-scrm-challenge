@@ -10,7 +10,7 @@ phases:
       - mv hadoop-3.3.1 /opt/hadoop
       - echo 'export HADOOP_HOME=/opt/hadoop' >> $HOME/.bashrc
       - echo 'export PATH=$PATH:$HADOOP_HOME/bin' >> $HOME/.bashrc
-      - source $HOME/.bashrc
+      - . $HOME/.bashrc
       - python3 -m pip install pyspark==3.1.2
       
   build:
