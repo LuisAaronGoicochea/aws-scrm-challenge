@@ -14,22 +14,23 @@ def main():
     secret_data = json.loads(secret[0])
     access_key = secret_data["access_key"]
     secret_access_key = secret_data["secret_key"]
-    
+
     # Creando la configuración de Spark
     conf = SparkConf().setAppName("scrm-challenge")
+    conf.set("spark.hadoop.fs.s3a.access.key", access_key)
+    conf.set("spark.hadoop.fs.s3a.secret.key", secret_access_key)
+    conf.set("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+    
+    # Creando el contexto de Spark
     sc = SparkContext(conf=conf)
-
+    
     # Creando la sesión de Spark
-    spark = SparkSession(sc).builder.appName("scrm-challenge-app") \
-        .config("spark.hadoop.fs.s3a.access.key", access_key) \
-        .config("spark.hadoop.fs.s3a.secret.key", secret_access_key) \
-        .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
-        .getOrCreate()
-
+    spark = SparkSession(sc).builder.appName("scrm-challenge-app").getOrCreate()
+    
     hadoopConf = sc._jsc.hadoopConfiguration()
     hadoopConf.set("fs.s3a.access.key", access_key)
     hadoopConf.set("fs.s3a.secret.key", secret_access_key)
-    hadoopConf.set("spark.hadoop.fs.s3a.aws.credential.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider")
+    hadoopConf.set("spark.hadoop.fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider")
     
     data_processor = DataProcessor(spark)
     raw_path= "s3a://scrm-challenge-raw/scrm/raw/data"
