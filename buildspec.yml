@@ -11,6 +11,7 @@ phases:
       - echo 'export HADOOP_HOME=/opt/hadoop' >> $HOME/.bashrc
       - echo 'export PATH=$PATH:$HADOOP_HOME/bin' >> $HOME/.bashrc
       - . $HOME/.bashrc
+      - apt-get install -y hadoop-aws
       - python3 -m pip install pyspark==3.1.2
       
   build:
