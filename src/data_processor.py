@@ -7,16 +7,17 @@ class DataProcessor:
     def __init__(self, spark):
         self.spark = spark
 
-    def read_data(self, format, path, options=None):
+    def read_data(self, formats, paths, options=None):
         if options is None:
             options = {}
 
-        if isinstance(options, list):
-            # Combina los diccionarios en la lista de opciones
-            merged_options = dict(chain.from_iterable(d.items() for d in options))
-            options = merged_options
+        dataframes = []
 
-        return self.spark.read.format(format).options(**options).load(path)
+        for format, path in zip(formats, paths):
+            df = self.spark.read.format(format).options(**options).load(path)
+            dataframes.append(df)
+
+        return tuple(dataframes)
     
     def update_dataframe(self, base_df, new_df, select_columns, join_columns):
         new_df = new_df.select(*select_columns)
