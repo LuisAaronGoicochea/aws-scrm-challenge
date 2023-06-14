@@ -38,7 +38,7 @@ def main():
     
     result_output_path = "s3://scrm-bucket-resultados-challenge/scrm/results/data"
 
-    product_df, ticket_line_df, stores_df = data_processor.read_data(formats, options, data_paths)
+    product_df, ticket_line_df, stores_df = data_processor.read_data(formats,  data_paths, options)
     """
     # Ejercicio 1:
     

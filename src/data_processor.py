@@ -8,17 +8,6 @@ class DataProcessor:
         self.spark = spark
 
     def read_data(self, format, path, options=None):
-        """
-        Lee los datos de un archivo en el formato especificado y ruta dada.
-
-        Args:
-            format (str): Formato de los datos (ej. "json", "csv").
-            path (str): Ruta del archivo de datos.
-            options (dict, optional): Opciones adicionales para la lectura de datos. Default es None.
-
-        Retorna:
-            pyspark.sql.DataFrame: DataFrame que contiene los datos leídos.
-        """
         if options is None:
             options = {}
 
