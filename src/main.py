@@ -51,24 +51,22 @@ def main():
     distinct_stores_df = data_processor.distinct_stores(ticket_line_df, join_columns, group_by_columns, distinct_count_column, result_column)
 
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3 (se define una función coalesce en 1 para que guarde un solo archivo en el bucket.
-    data_processor.write_spark_df_to_s3_with_specific_file_name(distinct_stores_df, result_output_path + "/1_distinct_stores_df.csv")
+    data_processor.write_spark_df_to_s3_with_specific_file_name(distinct_stores_df, result_output_path + "/1_distinct_stores_df.csv", True)
     
     # Ejercicio 2:
     
-    # Definir los argumentos para la función calculate_second_most_selling
-    arguments = {
-        'join_columns': ['store_id'],
-        'group_by_columns': ['product_id', 'store_id'],
-        'quantity_column': 'quantity',
-        'rank_column': 'rank',
-        'select_columns': ['product_id', 'store_id', 'total_quantity']
-    }
+    # Definir los nombres de las columnas y los dataframes correspondientes
+    join_columns = ["store_id"]
+    group_by_columns = ["product_id", "store_id"]
+    quantity_column = "quantity"
+    rank_column = "rank"
+    select_columns = ["product_id", "store_id", "total_quantity"]
     
     # Realizar las operaciones de forma secuencial
-    second_most_selling_df = data_processor.calculate_second_most_selling(ticket_line_df, arguments)
+    second_most_selling_df = calculate_second_most_selling(ticket_lines_df, join_columns, group_by_columns, quantity_column, rank_column, select_columns)
     
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3
-    data_processor.write_spark_df_to_s3_with_specific_file_name(second_most_selling_df, result_output_path + "/2_second_most_selling_df.csv")
+    data_processor.write_spark_df_to_s3_with_specific_file_name(second_most_selling_df, result_output_path + "/2_second_most_selling_df.csv", True)
     """
     # Ejercicio 3:
     

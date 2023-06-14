@@ -23,13 +23,11 @@ class DataProcessor:
 
         return tuple(dfs)
     
-    def write_spark_df_to_s3_with_specific_file_name(self, df, output_path):
+    def write_spark_df_to_s3_with_specific_file_name(self, df, output_path, header_state):
         # Reparticionar y escribir spark dataframe en S3
-        df.repartition(1).write.mode("overwrite").format(
-            output_path.split(".")[-1]
-        ).save(
-            "/".join(output_path.split("/")[0:-1])
-        )
+        df.repartition(1).write.mode("overwrite").format(output_path.split(".")[-1]). \
+            option("header", header). \
+            save("/".join(output_path.split("/")[0:-1]))
 
         # Extraer nombre de bucket y clave dada una ruta de archivo S3
         s3_path = urlparse(output_path, allow_fragments=False)
@@ -55,22 +53,19 @@ class DataProcessor:
             .agg(count(distinct_count_column).alias(result_column))
         return distinct_stores_df
     
-    def calculate_second_most_selling(self, base_df, arguments):
-        join_columns = arguments.get('join_columns')
-        group_by_columns = arguments.get('group_by_columns')
-        quantity_column = arguments.get('quantity_column')
-        rank_column = arguments.get('rank_column')
-        select_columns = arguments.get('select_columns')
+    def calculate_second_most_selling(self, base_df, join_columns, group_by_columns, quantity_column, rank_column, select_columns):
+        # Definición de la ventana de partición y ordenación
+        window_spec = Window.partitionBy(*group_by_columns).orderBy(desc(quantity_column))
 
-        window_spec = Window.partitionBy(group_by_columns).orderBy(desc(quantity_column))
+        # Agregación por group_by_columns, y suma de quantity_column
+        aggregated_df = base_df.groupBy(*group_by_columns) \
+            .agg(sum(col(quantity_column)).alias(quantity_column))
 
-        ranked_df = base_df \
-            .groupBy(*join_columns) \
-            .agg(sum(quantity_column).alias(quantity_column)) \
-            .withColumn(rank_column, row_number().over(window_spec))
+        # Asignación de ranking a los registros dentro de cada partición
+        ranked_df = aggregated_df.withColumn(rank_column, row_number().over(window_spec))
 
-        second_most_selling_df = ranked_df \
-            .filter(col(rank_column) == 2) \
+        # Filtrado del segundo registro más vendido
+        second_most_selling_df = ranked_df.filter(col(rank_column) == 2) \
             .select(*select_columns)
 
         return second_most_selling_df
