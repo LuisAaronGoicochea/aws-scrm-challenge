@@ -11,13 +11,14 @@ class DataProcessor:
         if options is None:
             options = {}
 
-        dataframes = []
+        dfs = []
+        for format, path, opts in zip(formats, paths, options):
+            df = self.spark.read.format(format)
+            for key, value in opts.items():
+                df = df.option(key, value)
+            dfs.append(df.load(path))
 
-        for format, path in zip(formats, paths):
-            df = self.spark.read.format(format).options(**options).load(path)
-            dataframes.append(df)
-
-        return tuple(dataframes)
+        return tuple(dfs)
     
     def update_dataframe(self, base_df, new_df, select_columns, join_columns):
         new_df = new_df.select(*select_columns)
