@@ -16,15 +16,15 @@ def main():
     secret_access_key = secret_data["secret_key"]
 
     # Asegurarse de tener los archivos JAR necesarios en el classpath de Spark
-    os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.hadoop:hadoop-aws:2.10.2 org.apache.hadoop:hadoop-client:2.10.2 pyspark-shell'
+    #os.environ['PYSPARK_SUBMIT_ARGS'] = '--packages org.apache.hadoop:hadoop-aws:2.10.2 org.apache.hadoop:hadoop-client:2.10.2 pyspark-shell'
 
     # Creando la configuración de Spark
     conf = SparkConf().setAppName("scrm-challenge")
     conf.set("spark.hadoop.fs.s3a.access.key", access_key)
     conf.set("spark.hadoop.fs.s3a.secret.key", secret_access_key)
     conf.set("spark.hadoop.fs.s3.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
-    conf.set("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.10.2,org.apache.hadoop:hadoop-client:2.10.2")
-    conf.set("spark.jars.excludes", "com.google.guava:guava")
+    #conf.set("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.10.2,org.apache.hadoop:hadoop-client:2.10.2")
+    #conf.set("spark.jars.excludes", "com.google.guava:guava")
     
     # Creando el contexto de Spark
     sc = SparkContext(conf=conf)
