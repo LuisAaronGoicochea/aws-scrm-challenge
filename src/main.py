@@ -1,4 +1,3 @@
-import os
 import json
 from pyspark.sql.functions import *
 from pyspark.sql import SparkSession
@@ -52,9 +51,7 @@ def main():
     distinct_stores_df = data_processor.distinct_stores(ticket_line_df, join_columns, group_by_columns, distinct_count_column, result_column)
 
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3 (se define una función coalesce en 1 para que guarde un solo archivo en el bucket.
-    distinct_stores_df.coalesce(1).write \
-        .option("header", True) \
-        .csv(result_output_path + "/1_distinct_stores_df.csv")
+    data_processor.write_spark_df_to_s3_with_specific_file_name(distinct_stores_df, result_output_path + "/1_distinct_stores_df.csv")
     """
     # Ejercicio 2:
     

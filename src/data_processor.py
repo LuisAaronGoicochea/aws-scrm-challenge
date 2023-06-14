@@ -1,7 +1,10 @@
+import boto3
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.window import Window
 from itertools import chain
+from urllib.parse import urlparse
+
 
 class DataProcessor:
     def __init__(self, spark):
@@ -19,6 +22,28 @@ class DataProcessor:
             dfs.append(df.load(path))
 
         return tuple(dfs)
+    
+    def write_spark_df_to_s3_with_specific_file_name(df, output_path):
+        # Reparticionar y escribir spark dataframe en S3
+        df.repartition(1).write.mode("overwrite").format(
+            output_path.split(".")[-1]
+        ).save(
+            "/".join(output_path.split("/")[0:-1])
+        )
+
+        # Extraer nombre de bucket y clave dada una ruta de archivo S3
+        s3_path = urlparse(output_path, allow_fragments=False)
+        bucket_name, key = s3_path.netloc, s3_path.path.lstrip("/")
+
+        # Renombra el archivo particionado
+        try:
+            s3 = boto3.resource('s3')
+            prefix = "/".join(key.split("/")[0:-1]) + "/part"
+            for obj in s3.Bucket(bucket_name).objects.filter(Prefix=prefix):
+                s3.Bucket(bucket_name).copy({'Bucket': bucket_name, 'Key': obj.key}, key)
+                s3.Object(bucket_name, obj.key).delete()
+        except Exception as err:
+            raise Exception("Error renaming the part file to {}: {}".format(output_path, err))
     
     def update_dataframe(self, base_df, new_df, select_columns, join_columns):
         new_df = new_df.select(*select_columns)
