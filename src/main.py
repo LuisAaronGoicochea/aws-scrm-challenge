@@ -51,8 +51,11 @@ def main():
     # Realizar las operaciones de forma secuencial
     distinct_stores_df = data_processor.distinct_stores(ticket_line_df, join_columns, group_by_columns, distinct_count_column, result_column)
 
-    # Exportar el DataFrame resultante a la capa Defined del bucket de S3
-    distinct_stores_df.write.option("header", True).csv(result_output_path + "/1_distinct_stores_df.csv", header=True)
+    # Exportar el DataFrame resultante a la capa Defined del bucket de S3 (se define una función coalesce en 1 para que guarde un solo archivo en el bucket.
+    distinct_stores_df.coalesce(1).write \
+        .option("header", True) \
+        .mode("overwrite") \
+        .save(result_output_path + "/1_distinct_stores_df.csv")
     """
     # Ejercicio 2:
     
