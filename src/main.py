@@ -52,7 +52,7 @@ def main():
 
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3 (se define una función coalesce en 1 para que guarde un solo archivo en el bucket.
     data_processor.write_spark_df_to_s3_with_specific_file_name(distinct_stores_df, result_output_path + "/1_distinct_stores_df.csv")
-    """
+    
     # Ejercicio 2:
     
     # Definir los argumentos para la función calculate_second_most_selling
@@ -68,8 +68,8 @@ def main():
     second_most_selling_df = data_processor.calculate_second_most_selling(base_df, arguments)
     
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3
-    second_most_selling_df.write.option("header", True).csv(result_output_path + "/2_second_most_selling_df.csv", header=True)
-    
+    data_processor.write_spark_df_to_s3_with_specific_file_name(second_most_selling_df, result_output_path + "/2_second_most_selling_df.csv")
+    """
     # Ejercicio 3:
     
     # Definir los argumentos para la función group_stores_by_category
