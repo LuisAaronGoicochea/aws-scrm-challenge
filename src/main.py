@@ -39,21 +39,21 @@ def main():
     result_output_path = "s3://scrm-bucket-resultados-challenge/scrm/results/data"
 
     product_df, ticket_line_df, stores_df = data_processor.read_data(formats,  data_paths, options)
-    """
+    
     # Ejercicio 1:
     
     # Definir las columnas para unir, agrupar y contar valores distintos, y el nombre de la columna de resultado
     join_columns = ["product_id"]
-    group_by_columns = ["product_id"]
+    group_by_columns = []
     distinct_count_column = "store_id"
     result_column = "num_stores"
 
     # Realizar las operaciones de forma secuencial
-    distinct_stores_df = data_processor.distinct_stores(base_df, join_columns, group_by_columns, distinct_count_column, result_column)
+    distinct_stores_df = data_processor.distinct_stores(ticket_line_df, join_columns, group_by_columns, distinct_count_column, result_column)
 
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3
     distinct_stores_df.write.option("header", True).csv(result_output_path + "/1_distinct_stores_df.csv", header=True)
-    
+    """
     # Ejercicio 2:
     
     # Definir los argumentos para la función calculate_second_most_selling
