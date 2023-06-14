@@ -53,10 +53,8 @@ def main():
 
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3 (se define una función coalesce en 1 para que guarde un solo archivo en el bucket.
     distinct_stores_df.coalesce(1).write \
-        .format("csv") \
         .option("header", True) \
-        .mode("overwrite") \
-        .save(result_output_path + "/1_distinct_stores_df.csv", format="csv")
+        .csv(result_output_path + "/1_distinct_stores_df.csv")
     """
     # Ejercicio 2:
     
