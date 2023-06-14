@@ -26,7 +26,7 @@ class DataProcessor:
     def write_spark_df_to_s3_with_specific_file_name(self, df, output_path, header_state):
         # Reparticionar y escribir spark dataframe en S3
         df.repartition(1).write.mode("overwrite").format(output_path.split(".")[-1]). \
-            option("header", header). \
+            option("header", header_state). \
             save("/".join(output_path.split("/")[0:-1]))
 
         # Extraer nombre de bucket y clave dada una ruta de archivo S3
