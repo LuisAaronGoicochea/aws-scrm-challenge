@@ -65,7 +65,7 @@ def main():
     }
     
     # Realizar las operaciones de forma secuencial
-    second_most_selling_df = data_processor.calculate_second_most_selling(ticket_lines_df, arguments)
+    second_most_selling_df = data_processor.calculate_second_most_selling(ticket_line_df, arguments)
     
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3
     data_processor.write_spark_df_to_s3_with_specific_file_name(second_most_selling_df, result_output_path + "/2_second_most_selling_df.csv")

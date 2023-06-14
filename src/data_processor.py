@@ -27,7 +27,9 @@ class DataProcessor:
         # Reparticionar y escribir spark dataframe en S3
         df.repartition(1).write.mode("overwrite").format(
             output_path.split(".")[-1]
-        ).save(output_path)
+        ).save(
+            "/".join(output_path.split("/")[0:-1])
+        )
 
         # Extraer nombre de bucket y clave dada una ruta de archivo S3
         s3_path = urlparse(output_path, allow_fragments=False)
