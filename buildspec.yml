@@ -1,11 +1,17 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - pip install pyspark==3.1.2
+
   pre_build:
     commands:
-      - apt-get update
-      - apt-get install -y python3-pip
-      - python3 -m pip install pyspark==3.1.2
+      - wget https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/2.10.2/hadoop-aws-2.10.2.jar -P $HOME/.m2/repository/org/apache/hadoop/hadoop-aws/2.10.2/
+      - wget https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-client/2.10.2/hadoop-client-2.10.2.jar -P $HOME/.m2/repository/org/apache/hadoop/hadoop-client/2.10.2/
+      - export SPARK_DIST_CLASSPATH=$(hadoop classpath)
       
   build:
     commands:
