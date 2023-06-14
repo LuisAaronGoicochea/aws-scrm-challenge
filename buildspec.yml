@@ -1,5 +1,9 @@
 version: 0.2
 
+env:
+  variables:
+    HADOOP_VERSION: "2.10.2"
+
 phases:
   install:
     runtime-versions:
@@ -9,8 +13,9 @@ phases:
 
   pre_build:
     commands:
-      - wget https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/2.10.2/hadoop-aws-2.10.2.jar -P $HOME/.m2/repository/org/apache/hadoop/hadoop-aws/2.10.2/
-      - wget https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-client/2.10.2/hadoop-client-2.10.2.jar -P $HOME/.m2/repository/org/apache/hadoop/hadoop-client/2.10.2/
+      - wget https://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz
+      - tar -xzf hadoop-${HADOOP_VERSION}.tar.gz
+      - export PATH=$PWD/hadoop-${HADOOP_VERSION}/bin:$PATH
       - export SPARK_DIST_CLASSPATH=$(hadoop classpath)
       
   build:
