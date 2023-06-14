@@ -28,7 +28,7 @@ class DataProcessor:
         distinct_stores_df = base_df \
             .groupBy(*join_columns, *group_by_columns) \
             .agg(countDistinct(distinct_count_column).alias(result_column))
-    return distinct_stores_df
+        return distinct_stores_df
     
     def calculate_second_most_selling(self, base_df, arguments):
         join_columns = arguments.get('join_columns')
