@@ -49,14 +49,13 @@ class DataProcessor:
     
     def group_stores_by_category(self, base_df, products_df, arguments):
         join_columns = arguments.get('join_columns')
-        select_columns = arguments.get('select_columns')
         group_by_column = arguments.get('group_by_column')
         aggregate_column = arguments.get('aggregate_column')
         alias_name = arguments.get('alias_name')
 
         grouped_df = base_df \
             .join(products_df, join_columns) \
-            .select(*select_columns) \
+            .select(products_df["categories.category_name"].alias("category_name"), second_most_selling_df["store_id"]]) \
             .groupBy(group_by_column) \
             .agg(collect_list(aggregate_column).alias(alias_name))
 

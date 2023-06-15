@@ -80,8 +80,7 @@ def main():
     
     # Definir los argumentos para la función group_stores_by_category
     arguments = {
-        'join_columns': second_most_selling_df["product_id"] == products_df["product_id"],
-        'select_columns': [products_df["categories.category_name"].alias("category_name"), second_most_selling_df["store_id"]],
+        'join_columns': "product_id",
         'group_by_column': "category_name",
         'aggregate_column': "store_id",
         'alias_name': "stores"
