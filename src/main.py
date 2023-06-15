@@ -109,10 +109,10 @@ def main():
         "version": "version"
     }
     
-    integratedDF = integrate_stores_data(stores_df, stores_v2_df, mapping_dict)
+    integrated_df = integrate_stores_data(stores_df, stores_v2_df, mapping_dict)
     
     # Exportar el DataFrame resultante a S3
-    unioned_stores_df.repartition(1). \
+    integrated_df.repartition(1). \
         write.mode("overwrite"). \
         format("csv"). \
         option("header", True). \
