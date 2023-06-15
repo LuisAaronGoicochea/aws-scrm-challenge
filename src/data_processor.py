@@ -37,18 +37,20 @@ class DataProcessor:
         print("key_prefix: ", key_prefix)
                 
         # Renombrar el archivo particionado
-        """try:
+        try:
             s3 = boto3.client('s3')
             #objects = s3.list_objects_v2(Bucket=bucket_name, Prefix=key_prefix)['Contents']
-            #for obj in objects:
-                #old_key = obj['Key']
-                #new_key = f"{key_prefix}/{file_name}"
+            for obj in objects:
+                old_key = obj['Key']
+                print(old_key)
+                new_key = f"{key_prefix}/{file_name}"
                 #s3.copy_object(Bucket=bucket_name, CopySource=f"{bucket_name}/{old_key}", Key=new_key)
                 #s3.delete_object(Bucket=bucket_name, Key=old_key)
             new_key = f"{key_prefix}/{file_name}"
-            s3.Object(bucket_name, new_key).copy_from()
+            #old_key = f"{key_prefix}/{}"
+            #s3.Object(bucket_name, new_key).copy_from()
         except Exception as err:
-            raise Exception("Error renaming the part files in {}: {}".format(output_path, err))"""
+            raise Exception("Error renaming the part files in {}: {}".format(output_path, err))
     
     def update_dataframe(self, base_df, new_df, select_columns, join_columns):
         new_df = new_df.select(*select_columns)
