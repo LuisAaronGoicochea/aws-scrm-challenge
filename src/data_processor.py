@@ -55,7 +55,7 @@ class DataProcessor:
 
         grouped_df = base_df \
             .join(products_df, join_columns) \
-            .select(products_df["categories.category_name"].alias("category_name"), second_most_selling_df["store_id"]]) \
+            .select(products_df["categories.category_name"].alias("category_name"), base_df["store_id"]) \
             .groupBy(group_by_column) \
             .agg(collect_list(aggregate_column).alias(alias_name))
 
