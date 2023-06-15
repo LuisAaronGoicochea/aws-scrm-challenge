@@ -47,7 +47,7 @@ class DataProcessor:
 
         return second_most_selling_df
     
-    def group_stores_by_category(self, base_df, arguments):
+    def group_stores_by_category(self, base_df, products_df, arguments):
         join_columns = arguments.get('join_columns')
         select_columns = arguments.get('select_columns')
         group_by_column = arguments.get('group_by_column')
@@ -55,7 +55,7 @@ class DataProcessor:
         alias_name = arguments.get('alias_name')
 
         grouped_df = base_df \
-            .join(productsDF, join_columns) \
+            .join(products_df, join_columns) \
             .select(*select_columns) \
             .groupBy(group_by_column) \
             .agg(collect_list(aggregate_column).alias(alias_name))

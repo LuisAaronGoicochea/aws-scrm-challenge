@@ -55,7 +55,7 @@ def main():
         write.mode("overwrite"). \
         format("csv"). \
         option("header", True). \
-        save(output_path + "1_distinct_stores_df")
+        save(result_output_path + "/1_distinct_stores_df")
     
     # Ejercicio 2:
     
@@ -74,25 +74,29 @@ def main():
         write.mode("overwrite"). \
         format("csv"). \
         option("header", True). \
-        save(output_path + "2_second_most_selling_df")
-    """
+        save(result_output_path + "/2_second_most_selling_df")
+    
     # Ejercicio 3:
     
     # Definir los argumentos para la función group_stores_by_category
     arguments = {
-        'join_columns': secondMostSellingDF["product_id"] == productsDF["product_id"],
-        'select_columns': [productsDF["categories.category_name"].alias("category_name"), secondMostSellingDF["store_id"]],
+        'join_columns': second_most_selling_df["product_id"] == products_df["product_id"],
+        'select_columns': [products_df["categories.category_name"].alias("category_name"), second_most_selling_df["store_id"]],
         'group_by_column': "category_name",
         'aggregate_column': "store_id",
         'alias_name': "stores"
     }
 
     # Realizar las operaciones de forma secuencial
-    grouped_stores_df = data_processor.group_stores_by_category(secondMostSellingDF, arguments)
+    grouped_stores_df = data_processor.group_stores_by_category(second_most_selling_df, products_df, arguments)
 
-    # Exportar el DataFrame resultante a la capa Defined del bucket de S3
-    grouped_stores_df.write.option("header", True).csv(result_output_path + "/3_grouped_stores_df.csv", header=True)
-    
+    # Exportar el DataFrame resultante a S3
+    grouped_stores_df.repartition(1). \
+        write.mode("overwrite"). \
+        format("csv"). \
+        option("header", True). \
+        save(result_output_path + "/3_grouped_stores_df")
+    """
     # Ejercicio 4:
     
     # Leer el archivo CSV "stores_v2.csv"
