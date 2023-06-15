@@ -23,7 +23,7 @@ class DataProcessor:
 
         return tuple(dfs)
     
-    def integrate_stores_data(stores_df, stores_v2_df, store_id_col, country_col, version_col):
+    def integrate_stores_data(self, stores_df, stores_v2_df, store_id_col, country_col, version_col):
 
         stores_v2_df = stores_v2_df.select(
             col(store_id_col).substr(3, 2).alias(store_id_col),
