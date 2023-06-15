@@ -87,7 +87,7 @@ def main():
     }
 
     # Realizar las operaciones de forma secuencial
-    grouped_stores_df = data_processor.group_stores_by_category(second_most_selling_df, products_df, arguments)
+    grouped_stores_df = data_processor.group_stores_by_category(second_most_selling_df, product_df, arguments)
 
     # Exportar el DataFrame resultante a S3
     grouped_stores_df.repartition(1). \
