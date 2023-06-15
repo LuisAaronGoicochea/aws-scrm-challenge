@@ -23,24 +23,23 @@ class DataProcessor:
 
         return tuple(dfs)
     
-    def write_spark_df_to_s3_with_specific_file_name(self, df, output_path, header_state):
+    def write_spark_df_to_s3_with_specific_file_name(self, df, output_path, file_name, header_state):
         # Reparticionar y escribir spark dataframe en S3
         df.repartition(1).write.mode("append").format(output_path.split(".")[-1]). \
             option("header", header_state). \
-            save("/".join(output_path.split("/")[0:-1]))
+            save(output_path)
 
         # Extraer nombre de bucket y clave dada una ruta de archivo S3
         s3_path = urlparse(output_path, allow_fragments=False)
-        bucket_name, key = s3_path.netloc, s3_path.path.lstrip("/")
+        bucket_name, key_prefix = s3_path.netloc, s3_path.path.lstrip("/").rsplit("/", 1)[0]
 
-        # Renombrar los archivos particionados
+        # Renombrar el archivo particionado
         try:
             s3 = boto3.client('s3')
-            prefix = "/".join(key.split("/")[0:-1]) + "/part"
-            objects = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)['Contents']
+            objects = s3.list_objects_v2(Bucket=bucket_name, Prefix=key_prefix)['Contents']
             for obj in objects:
                 old_key = obj['Key']
-                new_key = old_key.replace("/part", "")
+                new_key = f"{key_prefix}/{file_name}"
                 s3.copy_object(Bucket=bucket_name, CopySource=f"{bucket_name}/{old_key}", Key=new_key)
                 s3.delete_object(Bucket=bucket_name, Key=old_key)
         except Exception as err:
