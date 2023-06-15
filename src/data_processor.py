@@ -25,7 +25,7 @@ class DataProcessor:
     
     def write_spark_df_to_s3_with_specific_file_name(self, df, output_path, header_state):
         # Reparticionar y escribir spark dataframe en S3
-        df.repartition(1).write.mode("overwrite").format(output_path.split(".")[-1]). \
+        df.repartition(1).write.mode("append").format(output_path.split(".")[-1]). \
             option("header", header_state). \
             save("/".join(output_path.split("/")[0:-1]))
 
@@ -38,7 +38,8 @@ class DataProcessor:
             s3 = boto3.resource('s3')
             prefix = "/".join(key.split("/")[0:-1]) + "/part"
             for obj in s3.Bucket(bucket_name).objects.filter(Prefix=prefix):
-                s3.Bucket(bucket_name).copy({'Bucket': bucket_name, 'Key': obj.key}, key)
+                new_key = obj.key.replace("/part", "")
+                s3.Object(bucket_name, new_key).copy({'Bucket': bucket_name, 'Key': obj.key})
                 s3.Object(bucket_name, obj.key).delete()
         except Exception as err:
             raise Exception("Error renaming the part file to {}: {}".format(output_path, err))
