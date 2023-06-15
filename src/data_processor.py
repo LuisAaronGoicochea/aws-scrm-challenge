@@ -23,13 +23,16 @@ class DataProcessor:
 
         return tuple(dfs)
     
-    def integrate_stores_data(self, df1, df2, mapping_dict):
-        # Seleccionar las columnas relevantes del DataFrame "df2" y renombrarlas según el mapeo proporcionado
-        df2_selected = df2.select(*[col(col_name).alias(mapping_dict.get(col_name, col_name)) for col_name in df2.columns])
+    def integrate_stores_data(stores_df, stores_v2_df, store_id_col, country_col, version_col):
 
-        # Actualizar el DataFrame "df1" para incorporar los datos del DataFrame "df2"
-        integrated_df = df1.union(df2_selected)
-        
+        stores_v2_df = stores_v2_df.select(
+            col(store_id_col).substr(3, 2).alias(store_id_col),
+            col(store_id_col).substr(1, 2).alias(country_col),
+            col(version_col)
+        )
+
+        integrated_df = stores_df.union(stores_v2_df)
+
         return integrated_df
     
     def distinct_stores(self, base_df, join_columns, group_by_columns, distinct_count_column, result_column):

@@ -99,14 +99,8 @@ def main():
         save(result_output_path + "/3_grouped_stores_df")
     
     # Ejercicio 4:
-    
-    # Definir el mapeo de columnas
-    mapping_dict = {
-        "store_id": "store_id",
-        "version": "version"
-    }
-    
-    integrated_df = data_processor.integrate_stores_data(stores_df, stores_v2_df, mapping_dict)
+        
+    integrated_df = data_processor.integrate_stores_data(stores_df, stores_v2_df, "store_id", "country", "version")
     
     # Exportar el DataFrame resultante a S3
     integrated_df.repartition(1). \
