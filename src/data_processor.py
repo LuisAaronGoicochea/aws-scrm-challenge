@@ -33,16 +33,18 @@ class DataProcessor:
         s3_path = urlparse(output_path, allow_fragments=False)
         bucket_name, key = s3_path.netloc, s3_path.path.lstrip("/")
 
-        # Renombra el archivo particionado
+        # Renombrar los archivos particionados
         try:
-            s3 = boto3.resource('s3')
+            s3 = boto3.client('s3')
             prefix = "/".join(key.split("/")[0:-1]) + "/part"
-            for obj in s3.Bucket(bucket_name).objects.filter(Prefix=prefix):
-                new_key = obj.key.replace("/part", "")
-                s3.Object(bucket_name, new_key).copy({'Bucket': bucket_name, 'Key': obj.key})
-                s3.Object(bucket_name, obj.key).delete()
+            objects = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)['Contents']
+            for obj in objects:
+                old_key = obj['Key']
+                new_key = old_key.replace("/part", "")
+                s3.copy_object(Bucket=bucket_name, CopySource=f"{bucket_name}/{old_key}", Key=new_key)
+                s3.delete_object(Bucket=bucket_name, Key=old_key)
         except Exception as err:
-            raise Exception("Error renaming the part file to {}: {}".format(output_path, err))
+            raise Exception("Error renaming the part files in {}: {}".format(output_path, err))
     
     def update_dataframe(self, base_df, new_df, select_columns, join_columns):
         new_df = new_df.select(*select_columns)
