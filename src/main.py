@@ -30,14 +30,16 @@ def main():
     raw_path= "s3://scrm-challenge-raw/scrm/raw/data"
     data_paths = [raw_path + "/products.json",
                   raw_path + "/ticket_line.csv",
-                  raw_path + "/stores.csv"]
+                  raw_path + "/stores.csv",
+                  raw_path + "/stores_v2.csv"]
                   
     formats = ["json", "csv", "csv"]
-    options = [{"header": "true"}, {"header": "true"}, {"header": "true"}]
+    options = [{"header": "true"}, {"header": "true"}, {"header": "true"}, {"header": "true"}]
     
     result_output_path = "s3://scrm-bucket-resultados-challenge/scrm/results/data"
 
-    product_df, ticket_line_df, stores_df = data_processor.read_data(formats,  data_paths, options)
+    # Se incluye también el CSV stores_v2
+    product_df, ticket_line_df, stores_df, stores_v2_df = data_processor.read_data(formats,  data_paths, options)
     
     # Ejercicio 1:
     
@@ -97,11 +99,6 @@ def main():
         save(result_output_path + "/3_grouped_stores_df")
     
     # Ejercicio 4:
-    
-    # Leer el archivo CSV "stores_v2.csv"
-    stores_v2_path = raw_path + "/stores_v2.csv"
-    
-    stores_v2_df = data_processor.read_data("csv", stores_v2_path, [{"header": "true"}])
     
     # Definir el mapeo de columnas
     mapping_dict = {
