@@ -55,11 +55,11 @@ class DataProcessor:
     
     def calculate_second_most_selling(self, base_df, join_columns, group_by_columns, quantity_column, rank_column, select_columns):
         # Definición de la ventana de partición y ordenación
-        window_spec = Window.partitionBy(*group_by_columns).orderBy(desc(quantity_column))
+        window_spec = Window.partitionBy(*group_by_columns).orderBy(desc("total_quantity"))
 
         # Agregación por group_by_columns, y suma de quantity_column
         aggregated_df = base_df.groupBy(*group_by_columns) \
-            .agg(sum(col(quantity_column)).alias(quantity_column))
+            .agg(sum(col(quantity_column)).alias("total_quantity"))
 
         # Asignación de ranking a los registros dentro de cada partición
         ranked_df = aggregated_df.withColumn(rank_column, row_number().over(window_spec))
