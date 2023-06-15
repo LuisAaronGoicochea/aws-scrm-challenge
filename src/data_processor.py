@@ -31,7 +31,7 @@ class DataProcessor:
 
         # Extraer nombre de bucket y clave dada una ruta de archivo S3
         s3_path = urlparse(output_path, allow_fragments=False)
-        bucket_name, key_prefix = s3_path.netloc, s3_path.path.lstrip("/").rsplit("/", 1)[0]
+        bucket_name, key_prefix = s3_path.netloc, s3_path.path.lstrip("/").rsplit("/", 0)[0]
         
         print("bucket_name: ", bucket_name)
         print("key_prefix: ", key_prefix)
