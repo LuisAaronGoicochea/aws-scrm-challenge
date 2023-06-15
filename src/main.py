@@ -106,7 +106,7 @@ def main():
         "version": "version"
     }
     
-    integrated_df = integrate_stores_data(stores_df, stores_v2_df, mapping_dict)
+    integrated_df = data_processor.integrate_stores_data(stores_df, stores_v2_df, mapping_dict)
     
     # Exportar el DataFrame resultante a S3
     integrated_df.repartition(1). \
