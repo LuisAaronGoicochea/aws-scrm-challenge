@@ -101,7 +101,7 @@ def main():
     # Leer el archivo CSV "stores_v2.csv"
     stores_v2_path = raw_path + "/stores_v2.csv"
     
-    stores_v2_df = data_processor.read_data("csv", stores_v2_path, {"header": "true"})
+    stores_v2_df = data_processor.read_data("csv", stores_v2_path, [{"header": "true"}])
     
     # Definir el mapeo de columnas
     mapping_dict = {
