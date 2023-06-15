@@ -51,7 +51,7 @@ def main():
     distinct_stores_df = data_processor.distinct_stores(ticket_line_df, join_columns, group_by_columns, distinct_count_column, result_column)
 
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3 (se define una función coalesce en 1 para que guarde un solo archivo en el bucket.
-    data_processor.write_spark_df_to_s3_with_specific_file_name(distinct_stores_df, result_output_path, "/1_distinct_stores_df.csv", True)
+    data_processor.write_spark_df_to_s3_with_specific_file_name(distinct_stores_df, result_output_path, "1_distinct_stores_df.csv", True)
     
     # Ejercicio 2:
     
@@ -66,7 +66,7 @@ def main():
     second_most_selling_df = data_processor.calculate_second_most_selling(ticket_line_df, stores_df, join_columns, group_by_columns, quantity_column, rank_column, select_columns)
     
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3
-    data_processor.write_spark_df_to_s3_with_specific_file_name(second_most_selling_df, result_output_path, "/2_second_most_selling_df.csv", True)
+    data_processor.write_spark_df_to_s3_with_specific_file_name(second_most_selling_df, result_output_path, "2_second_most_selling_df.csv", True)
     """
     # Ejercicio 3:
     
