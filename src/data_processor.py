@@ -23,7 +23,7 @@ class DataProcessor:
 
         return tuple(dfs)
     
-    def integrate_stores_data(df1, df2, mapping_dict):
+    def integrate_stores_data(self, df1, df2, mapping_dict):
         # Seleccionar las columnas relevantes del DataFrame "df2" y renombrarlas según el mapeo proporcionado
         df2_selected = df2.select(*[col(col_name).alias(mapping_dict.get(col_name, col_name)) for col_name in df2.columns])
 
