@@ -92,7 +92,7 @@ def main():
     # Exportar el DataFrame resultante a S3
     grouped_stores_df.repartition(1). \
         write.mode("overwrite"). \
-        format("csv"). \
+        format("json"). \
         option("header", True). \
         save(result_output_path + "/3_grouped_stores_df")
     """
