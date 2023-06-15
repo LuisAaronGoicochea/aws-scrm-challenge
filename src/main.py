@@ -63,7 +63,7 @@ def main():
     select_columns = ["product_id", "store_id", "total_quantity"]
     
     # Realizar las operaciones de forma secuencial
-    second_most_selling_df = data_processor.calculate_second_most_selling(ticket_line_df, join_columns, group_by_columns, quantity_column, rank_column, select_columns)
+    second_most_selling_df = data_processor.calculate_second_most_selling(ticket_line_df, stores_df, join_columns, group_by_columns, quantity_column, rank_column, select_columns)
     
     # Exportar el DataFrame resultante a la capa Defined del bucket de S3
     data_processor.write_spark_df_to_s3_with_specific_file_name(second_most_selling_df, result_output_path + "/2_second_most_selling_df.csv", True)
