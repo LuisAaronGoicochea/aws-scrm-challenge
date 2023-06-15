@@ -58,7 +58,7 @@ def main():
     # Definir los nombres de las columnas y los dataframes correspondientes
     join_columns = ["store_id"]
     group_by_columns = ["product_id", "store_id"]
-    quantity_column = "total_quantity"
+    quantity_column = "quantity"
     rank_column = "rank"
     select_columns = ["product_id", "store_id", "total_quantity"]
     
