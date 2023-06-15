@@ -53,19 +53,20 @@ class DataProcessor:
             .agg(count(distinct_count_column).alias(result_column))
         return distinct_stores_df
     
-    def calculate_second_most_selling(self, base_df, join_columns, group_by_columns, quantity_column, rank_column, select_columns):
+    def calculate_second_most_selling(self, base_df, join_df, join_columns, group_by_columns, quantity_column, rank_column, select_columns):
         # Definición de la ventana de partición y ordenación
-        window_spec = Window.partitionBy(*group_by_columns).orderBy(desc("total_quantity"))
+        window_spec = Window.partitionBy(base_df.product_id).orderBy(desc("total_quantity"))
 
         # Agregación por group_by_columns, y suma de quantity_column
-        aggregated_df = base_df.groupBy(*group_by_columns) \
+        aggregated_df = base_df.join(join_df, join_columns) \
+            .groupBy(*group_by_columns) \
             .agg(sum(col(quantity_column)).alias("total_quantity"))
 
         # Asignación de ranking a los registros dentro de cada partición
         ranked_df = aggregated_df.withColumn(rank_column, row_number().over(window_spec))
 
         # Filtrado del segundo registro más vendido
-        second_most_selling_df = ranked_df.filter(col(rank_column) == 2) \
+        second_most_selling_df = ranked_df.filter(ranked_df.rank == 2) \
             .select(*select_columns)
 
         return second_most_selling_df
