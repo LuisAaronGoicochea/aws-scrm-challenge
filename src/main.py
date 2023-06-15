@@ -95,27 +95,28 @@ def main():
         format("json"). \
         option("header", True). \
         save(result_output_path + "/3_grouped_stores_df")
-    """
+    
     # Ejercicio 4:
     
     # Leer el archivo CSV "stores_v2.csv"
     stores_v2_path = raw_path + "/stores_v2.csv"
     
-    # Definir las columnas a seleccionar y las columnas para unir los DataFrames
+    stores_v2_df = data_processor.read_data("csv", stores_v2_path, {"header": "true"})
     
-    select_columns = [
-        col("store_id").substr(3, 2).alias("store_id"),
-        col("store_id").substr(1, 2).alias("country"),
-        "version"
-    ]
+    # Definir el mapeo de columnas
+    mapping_dict = {
+        "store_id": "store_id",
+        "version": "version"
+    }
     
-    # Definir las columnas para hacer la unión. En caso no tenga, dejar en blanco
-    join_columns = []
+    integratedDF = integrate_stores_data(stores_df, stores_v2_df, mapping_dict)
     
-    updated_stores_df = data_processor.update_dataframe(stores_df, stores_v2_df, select_columns, join_columns)
-    
-    # Exportar el DataFrame resultante a la capa Defined del bucket de S3
-    unioned_stores_df.write.option("header", True).csv(result_output_path + "/4_unioned_stores_df.csv", header=True)"""
+    # Exportar el DataFrame resultante a S3
+    unioned_stores_df.repartition(1). \
+        write.mode("overwrite"). \
+        format("csv"). \
+        option("header", True). \
+        save(result_output_path + "/4_unioned_stores_df")
 
 if __name__ == "__main__":
     main()
